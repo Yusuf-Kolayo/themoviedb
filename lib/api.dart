@@ -8,15 +8,13 @@ import 'package:connectivity/connectivity.dart';
 class Api {
       Api();
 
-      static const Map<String, String> headers = {
-          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2M2RiMzQyMjZlZTE2MWRlZGMxOTYyNTAxOWRkNzRiZiIsInN1YiI6IjY1MWQ5Njc5NWIxMjQwMDExZDdjZGE1NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.J9ig-MqVOhsf9gQAoNkLhxcxnvkwfTxQ8RBV1Zt5FPk',
-          'accept': 'application/json', // Set your desired content type
-      };
-   
 
 
-
-        Future<Map<String, dynamic>> handleRequest({required String method, required String url, required Map<String, dynamic> body}) async {
+        Future<Map<String, dynamic>> handleRequest({
+          required String method, 
+          required Map<String, String> headers, 
+          required String url, 
+          required Map<String, dynamic> body}) async {
             // Check for internet connectivity
             var connectivityResult = await (Connectivity().checkConnectivity());
             if (connectivityResult == ConnectivityResult.none) {
@@ -52,10 +50,28 @@ class Api {
 
 
        Future createNewRequestToken() async {
+              Map<String, String> headers = {
+                  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2M2RiMzQyMjZlZTE2MWRlZGMxOTYyNTAxOWRkNzRiZiIsInN1YiI6IjY1MWQ5Njc5NWIxMjQwMDExZDdjZGE1NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.J9ig-MqVOhsf9gQAoNkLhxcxnvkwfTxQ8RBV1Zt5FPk',
+                  'accept': 'application/json', // Set your desired content type
+              };
+          
             const String url = 'https://api.themoviedb.org/3/authentication/token/new';
             final Map<String, String> body = {};
 
-            return handleRequest(method:'get', url: url, body: body);
+            return handleRequest(method:'get', headers: headers, url: url, body: body);
+        }
+
+
+      Future createSessionID() async {
+           Map<String, String> headers = {
+                  'Accept': 'application/json', // Set your desired content type
+                  'content-type': 'application/json',
+                  'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI2M2RiMzQyMjZlZTE2MWRlZGMxOTYyNTAxOWRkNzRiZiIsInN1YiI6IjY1MWQ5Njc5NWIxMjQwMDExZDdjZGE1NyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.J9ig-MqVOhsf9gQAoNkLhxcxnvkwfTxQ8RBV1Zt5FPk',
+              };
+            const String url = 'https://api.themoviedb.org/3/authentication/session/new';
+            final Map<String, String> body = {};
+
+            return handleRequest(method:'post', headers: headers, url: url, body: body);
         }
   
 }
