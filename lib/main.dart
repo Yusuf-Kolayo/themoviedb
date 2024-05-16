@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:themoviedb/constants.dart';
 import 'package:themoviedb/routes.dart';
 import 'package:themoviedb/sign_in_screen.dart';
 
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget  {
       title: 'BN LAG',
        theme: ThemeData(
         brightness: Brightness.light,
-        primaryColor: Colors.cyan[800],
+        primaryColor: primaryColor,
         fontFamily: 'Georgia',
         textTheme:  const TextTheme(
           displayLarge: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),

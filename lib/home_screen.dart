@@ -6,6 +6,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:themoviedb/Api/moviesApi.dart';
 
 
 
@@ -22,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
 final TextEditingController searchController = TextEditingController();
 // one must always be true, means selected.
 List <bool> isSelected = [true, false];
+
 // Map <int, Map<String, String>> movies = {
 //     0: {
 //           'title': 'Dune: Part Two',
@@ -252,6 +254,14 @@ Widget build(BuildContext context) {
                           }
                         ),
                     ),
+
+                    const SizedBox(height: 20),
+                    FutureBuilder(
+                      future: MoviesApi().loadHomeData(), 
+                      builder:(context, snapshot) {
+                          return const Center();
+                      },
+                    )
       
                 ],
             ),
