@@ -7,9 +7,12 @@ import 'package:connectivity/connectivity.dart';
 
 
 
+
+
+
 class MoviesApi {
   
-      final String baseUrl = 'https://----------------------------------------';      // Replace with your API base URL
+      final String baseUrl = 'https://movies-api14.p.rapidapi.com';      // Replace with your API base URL
       late final Map<String, String> headers;
 
 
@@ -19,8 +22,8 @@ class MoviesApi {
 
       void _initializeHeaders() {
         headers = {
-            'X-RapidAPI-Key': '',
-            'X-RapidAPI-Host': ''
+          'X-RapidAPI-Key': 'a715ee6403msh4e07a2273aec7d1p12afbbjsn0c64162e49a6',
+          'X-RapidAPI-Host': 'movies-api14.p.rapidapi.com'
         };
       }
 
@@ -66,19 +69,14 @@ class MoviesApi {
       }
 
 
-
-
+      
 
 
       Future<Map<String, dynamic>>  loadHomeData() async {
-           String endpoint = '/';
+           String endpoint = '/home';
            String url = baseUrl+endpoint;
            var response = await handleRequest(method: 'get',url: url, body: {});
            return response;
       }
-
-
-
- 
 
 }

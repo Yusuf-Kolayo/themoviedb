@@ -2,11 +2,14 @@
 
 
 import 'dart:core';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:themoviedb/Api/moviesApi.dart';
+import 'package:themoviedb/Api/movies_api.dart';
+import 'package:themoviedb/Models/movies.dart';
+import 'package:themoviedb/size_config.dart';
 
 
 
@@ -259,6 +262,96 @@ Widget build(BuildContext context) {
                     FutureBuilder(
                       future: MoviesApi().loadHomeData(), 
                       builder:(context, snapshot) {
+                          
+                          if (snapshot.connectionState == ConnectionState.waiting || snapshot.connectionState == ConnectionState.active) {
+                                  return SizedBox(
+                                      height: getProportionateScreenWidth(200),
+                                      child: const Center(child: CircularProgressIndicator()));
+                              } else if (snapshot.hasError) {
+                                  return Text('Error: ${snapshot.error}');
+                              } else if (snapshot.connectionState == ConnectionState.done) {
+              
+                                        final response = snapshot.data;
+                                  
+                                        if (response!.isNotEmpty) {  
+                                              final moviesData = response['data'];
+                                              final String movieCategory = moviesData[0]['title'].toString();
+                                              final List <dynamic> moviesArray = moviesData[0]['movies'];
+
+                                              List<Movie> moviesList = [];
+                                              for (var index = 0; index < moviesArray.length; index++) {
+                                                
+                                                  final Movie movie = Movie(
+                                                      id: moviesArray[index]['_id'], 
+                                                      backdropPath: moviesArray[index]['backdrop_path'], 
+                                                      genres: moviesArray[index]['genres'].toString(), 
+                                                      originalTitle: moviesArray[index]['original_title'], 
+                                                      overview: moviesArray[index]['overview'], 
+                                                      posterPath: moviesArray[index]['poster_path'], 
+                                                      releaseDate: moviesArray[index]['release_date'], 
+                                                      title: moviesArray[index]['title'], 
+                                                      contentType: moviesArray[index]['contentType']
+                                                  );
+                                                  moviesList.add(movie);
+
+                                              }
+                                              log(moviesList.toString());
+                                              // for (var index = 0; index < moviesData.length; index++) {
+                                              //     log(moviesData[index].toString());
+                                              //     log(''); log('');
+                                              // }
+                                              return Container(
+                                                 height: getProportionateScreenHeight(600),
+                                                 decoration:BoxDecoration(color: Colors.cyan.shade100),
+                                                 child: Column(
+                                                  children: [
+                                                      Padding(
+                                                        padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20), vertical: getProportionateScreenHeight(10)),
+                                                        child: Text(movieCategory, style:  GoogleFonts.kdamThmorPro( color: Colors.white, fontSize: 50 )),
+                                                      ),
+                                                      Container(
+                                                        height: getProportionateScreenHeight(400),
+                                                        padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20), vertical: getProportionateScreenHeight(30)),
+                                                        child: ListView.builder(
+                                                          itemCount: moviesList.length,
+                                                          scrollDirection: Axis.horizontal,
+                                                          itemBuilder: (BuildContext context, int index) {
+                                                            return Container(
+                                                              padding: const EdgeInsets.only(right: 15),
+                                                              height: getProportionateScreenHeight(300),
+                                                              child: Column(
+                                                                children: [
+                                                                    Container(
+                                                                        height: 300,
+                                                                        width: 200,
+                                                                        // padding: EdgeInsets.symmetric(horizontal: 40),
+                                                                        decoration:  BoxDecoration(
+                                                                          image: DecorationImage (
+                                                                            image: NetworkImage(moviesList[index].posterPath), // Replace with the URL of your network image
+                                                                            fit: BoxFit.contain, // Adjust the fit as needed
+                                                                          ),
+                                                                        ),
+                                                                      )
+                                                                ],
+                                                              ),
+                                                            );
+                                                          }
+                                                        )
+                                                      ),
+                                                  ],
+                                                 ),
+                                              );
+                                        } else {
+                                             return const Center(
+                                               child: Align(
+                                                  alignment: Alignment.center,
+                                                  child: Text('Soemthing went wrong, please try again ...'),
+                                               ),
+                                             );
+                                        }
+
+                              }
+                          
                           return const Center();
                       },
                     )
