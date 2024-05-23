@@ -11,6 +11,7 @@ import 'package:themoviedb/Api/movies_api.dart';
 import 'package:themoviedb/Models/movies.dart';
 import 'package:themoviedb/size_config.dart';
 
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -27,48 +28,112 @@ final TextEditingController searchController = TextEditingController();
 // one must always be true, means selected.
 List <bool> isSelected = [true, false];
 
-// Map <int, Map<String, String>> movies = {
-//     0: {
-//           'title': 'Dune: Part Two',
-//           'img': 'https://media.themoviedb.org/t/p/w220_and_h330_face/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg',
-//           'score': '85%',
-//           'date': 'Feb 27, 2024'
-//         },
-//     1: {
-//           'title': 'Argylle',
-//           'img': 'https://media.themoviedb.org/t/p/w220_and_h330_face/aOOvtA7OINVbARaN09Mnuv8DGB.jpg',
-//           'score': '61%',
-//           'date': 'Jan 31, 2024'
-//        },
-//     2: {
-//           'title': 'The Regime',
-//           'img': 'https://media.themoviedb.org/t/p/w220_and_h330_face/ztqPixNyezY6pWSNIP2AlhwPMO0.jpg',
-//           'score': '80%',
-//           'date': 'Mar 03, 2024'
-//        }
-// };
 
 
- List<Map<String, String>> movies = [
-      {
-          'title': 'Dune: Part Two',
-          'img': 'https://media.themoviedb.org/t/p/w220_and_h330_face/8b8R8l88Qje9dn9OE8PY05Nxl1X.jpg',
-          'score': '85%',
-          'date': 'Feb 27, 2024'
-        },
-      {
-          'title': 'Argylle',
-          'img': 'https://media.themoviedb.org/t/p/w220_and_h330_face/aOOvtA7OINVbARaN09Mnuv8DGB.jpg',
-          'score': '61%',
-          'date': 'Jan 31, 2024'
-       },
-      {
-          'title': 'The Regime',
-          'img': 'https://media.themoviedb.org/t/p/w220_and_h330_face/ztqPixNyezY6pWSNIP2AlhwPMO0.jpg',
-          'score': '80%',
-          'date': 'Mar 03, 2024'
-       }
-];
+
+ List<Map <String, dynamic>> movieCategoriesList = [];
+
+
+
+ Container singleMovieCategoryContainer () {
+      
+       
+ 
+      
+
+      // ignore: sized_box_for_whitespace
+      return Container(
+        height: 600,
+        child: ListView.builder(
+          scrollDirection: Axis.vertical,
+          itemCount: movieCategoriesList.length,
+          itemBuilder:(context, index) {
+                     
+              final String movieCategory = movieCategoriesList[index]['title'].toString();
+              final List <Movie> moviesList = movieCategoriesList[index]['movies'];
+
+             // ignore: sized_box_for_whitespace
+             return Container(
+                height: getProportionateScreenHeight(400),
+                // decoration:BoxDecoration(border: Border.all(color: Colors.cyan.shade800), borderRadius: BorderRadius.circular(10)),
+                child: Column(
+                children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 0, top: 10, bottom: 5),
+                      child: Align( alignment: Alignment.centerLeft, child: Text(movieCategory, style:  GoogleFonts.kdamThmorPro( color: Colors.cyan.shade900, fontSize: 26))),
+                    ),
+                    // ignore: sized_box_for_whitespace
+                    Container(
+                      height: getProportionateScreenHeight(340),
+                      // padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20), vertical: getProportionateScreenHeight(30)),
+                      child: ListView.builder(
+                        itemCount: moviesList.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (BuildContext context, int ind) {
+                          return Container(
+                            padding: const EdgeInsets.only(right: 15),
+                            // height: getProportionateScreenHeight(300),
+                            child: Container(
+                                // height: 200,
+                                width: 200,
+                                decoration:  BoxDecoration(
+                                  image: DecorationImage (
+                                    image: NetworkImage(moviesList[ind].posterPath), // Replace with the URL of your network image
+                                    fit: BoxFit.contain, // Adjust the fit as needed
+                                  ),
+                                ),
+                              ),
+                          );
+                        }
+                      )
+                    ),
+                ],
+                ),
+            );
+
+          }
+        ),
+      );
+ 
+     // ignore: sized_box_for_whitespace
+    //  return Container(
+    //             height: getProportionateScreenHeight(400),
+    //             // decoration:BoxDecoration(border: Border.all(color: Colors.cyan.shade800), borderRadius: BorderRadius.circular(10)),
+    //             child: Column(
+    //             children: [
+    //                 Padding(
+    //                   padding: const EdgeInsets.only(left: 0, top: 10, bottom: 5),
+    //                   child: Align( alignment: Alignment.centerLeft, child: Text(movieCategory, style:  GoogleFonts.kdamThmorPro( color: Colors.cyan.shade900, fontSize: 30 ))),
+    //                 ),
+    //                 // ignore: sized_box_for_whitespace
+    //                 Container(
+    //                   height: getProportionateScreenHeight(340),
+    //                   // padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20), vertical: getProportionateScreenHeight(30)),
+    //                   child: ListView.builder(
+    //                     itemCount: moviesList.length,
+    //                     scrollDirection: Axis.horizontal,
+    //                     itemBuilder: (BuildContext context, int index) {
+    //                       return Container(
+    //                         padding: const EdgeInsets.only(right: 15),
+    //                         // height: getProportionateScreenHeight(300),
+    //                         child: Container(
+    //                             // height: 200,
+    //                             width: 200,
+    //                             decoration:  BoxDecoration(
+    //                               image: DecorationImage (
+    //                                 image: NetworkImage(moviesList[index].posterPath), // Replace with the URL of your network image
+    //                                 fit: BoxFit.contain, // Adjust the fit as needed
+    //                               ),
+    //                             ),
+    //                           ),
+    //                       );
+    //                     }
+    //                   )
+    //                 ),
+    //             ],
+    //             ),
+    //         );
+ }
 
 @override
 Widget build(BuildContext context) {
@@ -166,197 +231,70 @@ Widget build(BuildContext context) {
           ),
 
           Container(
-            //  height: 400,
+            // height: 600,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: Column(
-                children: [
-                    Row(
-                      children: [
-                          const Padding(
-                            padding:  EdgeInsets.only(right: 20),
-                            child:  Text('Trending', style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-                          ),
-                          ToggleButtons(
-                            direction:Axis.vertical,
-                            // list of booleans
-                            isSelected: isSelected,
-                            // text color of selected toggle
-                            selectedColor: Colors.white,
-                            // text color of not selected toggle
-                            color: Colors.blue,
-                            // fill color of selected toggle
-                            fillColor: Colors.lightBlue.shade900,
-                            // when pressed, splash color is seen
-                            splashColor: Colors.cyan,
-                            // long press to identify highlight color
-                            highlightColor: Colors.lightBlue.shade900,
-                            // if consistency is needed for all text style
-                            textStyle: const TextStyle(fontWeight: FontWeight.bold),
-                            // border properties for each toggle
-                            renderBorder: true,
-                            borderColor: Colors.black,
-                            borderWidth: .5,
-                            borderRadius: BorderRadius.circular(10),
-                            selectedBorderColor: Colors.cyan,
-                            // add widgets for which the users need to toggle
-                            children: const [
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                                child: Text('Today', style: TextStyle(fontSize: 15)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 0),
-                                child: Text('This week', style: TextStyle(fontSize: 15)),
-                              )
-                            ],
+            child: Consumer(
+              builder: (context, ref, child) {
+                 if (movieCategoriesList.isNotEmpty) {
+                      return singleMovieCategoryContainer();
+                 } else {
+                      return FutureBuilder(
+                            future: MoviesApi().loadHomeData(), 
+                            builder:(context, snapshot) {
 
-                            // to select or deselect when pressed
-                            onPressed: (int newIndex) {
-                              setState(() {
-                                // looping through the list of booleans values
-                                for (int index = 0; index < isSelected.length; index++) {
-                                  if (index == newIndex) {
-                                    // toggling between the button to set it to true
-                                    isSelected[index] = !isSelected[index];
-                                  } else {
-                                    // other two buttons will not be selected and are set to false
-                                    isSelected[index] = false;
-                                  }
+                                if (snapshot.connectionState == ConnectionState.waiting || snapshot.connectionState == ConnectionState.active) {
+                                    return SizedBox(
+                                        height: getProportionateScreenWidth(200),
+                                        child: const Center(child: CircularProgressIndicator()));
+                                } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                } else if (snapshot.connectionState == ConnectionState.done) {
+
+                                      final response = snapshot.data;
+                                      if (response!.isNotEmpty) {  
+
+                                            final moviesData = response['data'];   
+                                      
+                                            for (var i = 0; i < moviesData.length; i++) {
+                                              final String movieCategory = moviesData[i]['title'].toString();
+                                              final List <dynamic> moviesArray = moviesData[i]['movies'];
+                                                      List<Movie> moviesList = [];
+                                                    for (var index = 0; index < moviesArray.length; index++) {
+                                                        final Movie movie = Movie(
+                                                            id: moviesArray[index]['_id'], 
+                                                            backdropPath: moviesArray[index]['backdrop_path'], 
+                                                            genres: moviesArray[index]['genres'].toString(), 
+                                                            originalTitle: moviesArray[index]['original_title'], 
+                                                            overview: moviesArray[index]['overview'], 
+                                                            posterPath: moviesArray[index]['poster_path'], 
+                                                            releaseDate: moviesArray[index]['release_date'], 
+                                                            title: moviesArray[index]['title'], 
+                                                            contentType: moviesArray[index]['contentType']
+                                                        );
+                                                        moviesList.add(movie);
+                                                    }
+                                                    log(moviesList.toString());
+                                                    movieCategoriesList.add({'title': movieCategory, 'movies': moviesList});
+                                            } 
+
+
+                                            return singleMovieCategoryContainer();
+                                      } else {
+                                            return const Center(
+                                              child: Align(
+                                                alignment: Alignment.center,
+                                                child: Text('Soemthing went wrong, please try again ...'),
+                                              ),
+                                            );
+                                      }
+
                                 }
-                              });
+
+                                return const Center();
                             },
-                          )
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      height: 300,
-                      // width: 400,
-                      child: ListView.builder(
-                          itemCount: 3,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (BuildContext context, int index) {
-                            return Container(
-                              padding: const EdgeInsets.only(right: 15),
-                              child: Column(
-                                children: [
-                                    Container(
-                                        height: 300,
-                                        width: 200,
-                                        // padding: EdgeInsets.symmetric(horizontal: 40),
-                                        decoration:  BoxDecoration(
-                                          image: DecorationImage (
-                                            image: NetworkImage(movies[index]['img']!), // Replace with the URL of your network image
-                                            fit: BoxFit.contain, // Adjust the fit as needed
-                                          ),
-                                        ),
-                                      )
-                                ],
-                              ),
-                            );
-                          }
-                        ),
-                    ),
-
-                    const SizedBox(height: 20),
-                    FutureBuilder(
-                      future: MoviesApi().loadHomeData(), 
-                      builder:(context, snapshot) {
-                          
-                          if (snapshot.connectionState == ConnectionState.waiting || snapshot.connectionState == ConnectionState.active) {
-                                  return SizedBox(
-                                      height: getProportionateScreenWidth(200),
-                                      child: const Center(child: CircularProgressIndicator()));
-                              } else if (snapshot.hasError) {
-                                  return Text('Error: ${snapshot.error}');
-                              } else if (snapshot.connectionState == ConnectionState.done) {
-              
-                                        final response = snapshot.data;
-                                  
-                                        if (response!.isNotEmpty) {  
-                                              final moviesData = response['data'];
-                                              final String movieCategory = moviesData[0]['title'].toString();
-                                              final List <dynamic> moviesArray = moviesData[0]['movies'];
-
-                                              List<Movie> moviesList = [];
-                                              for (var index = 0; index < moviesArray.length; index++) {
-                                                
-                                                  final Movie movie = Movie(
-                                                      id: moviesArray[index]['_id'], 
-                                                      backdropPath: moviesArray[index]['backdrop_path'], 
-                                                      genres: moviesArray[index]['genres'].toString(), 
-                                                      originalTitle: moviesArray[index]['original_title'], 
-                                                      overview: moviesArray[index]['overview'], 
-                                                      posterPath: moviesArray[index]['poster_path'], 
-                                                      releaseDate: moviesArray[index]['release_date'], 
-                                                      title: moviesArray[index]['title'], 
-                                                      contentType: moviesArray[index]['contentType']
-                                                  );
-                                                  moviesList.add(movie);
-
-                                              }
-                                              log(moviesList.toString());
-                                              // for (var index = 0; index < moviesData.length; index++) {
-                                              //     log(moviesData[index].toString());
-                                              //     log(''); log('');
-                                              // }
-                                              return Container(
-                                                 height: getProportionateScreenHeight(600),
-                                                 decoration:BoxDecoration(color: Colors.cyan.shade100),
-                                                 child: Column(
-                                                  children: [
-                                                      Padding(
-                                                        padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20), vertical: getProportionateScreenHeight(10)),
-                                                        child: Text(movieCategory, style:  GoogleFonts.kdamThmorPro( color: Colors.white, fontSize: 50 )),
-                                                      ),
-                                                      Container(
-                                                        height: getProportionateScreenHeight(400),
-                                                        padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20), vertical: getProportionateScreenHeight(30)),
-                                                        child: ListView.builder(
-                                                          itemCount: moviesList.length,
-                                                          scrollDirection: Axis.horizontal,
-                                                          itemBuilder: (BuildContext context, int index) {
-                                                            return Container(
-                                                              padding: const EdgeInsets.only(right: 15),
-                                                              height: getProportionateScreenHeight(300),
-                                                              child: Column(
-                                                                children: [
-                                                                    Container(
-                                                                        height: 300,
-                                                                        width: 200,
-                                                                        // padding: EdgeInsets.symmetric(horizontal: 40),
-                                                                        decoration:  BoxDecoration(
-                                                                          image: DecorationImage (
-                                                                            image: NetworkImage(moviesList[index].posterPath), // Replace with the URL of your network image
-                                                                            fit: BoxFit.contain, // Adjust the fit as needed
-                                                                          ),
-                                                                        ),
-                                                                      )
-                                                                ],
-                                                              ),
-                                                            );
-                                                          }
-                                                        )
-                                                      ),
-                                                  ],
-                                                 ),
-                                              );
-                                        } else {
-                                             return const Center(
-                                               child: Align(
-                                                  alignment: Alignment.center,
-                                                  child: Text('Soemthing went wrong, please try again ...'),
-                                               ),
-                                             );
-                                        }
-
-                              }
-                          
-                          return const Center();
-                      },
-                    )
-      
-                ],
+                          );
+                 }
+              },
             ),
           )
           

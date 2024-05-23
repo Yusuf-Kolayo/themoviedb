@@ -6,7 +6,7 @@ class Movie {
   late String originalTitle;
   late String overview;
   late String posterPath;
-  late String releaseDate;
+  late String? releaseDate;
   late String title;
   late String contentType;
 
