@@ -16,6 +16,7 @@ void main() async {
 
 
 
+
 class MyApp extends StatelessWidget  {
   const MyApp({super.key});
 
@@ -26,16 +27,16 @@ class MyApp extends StatelessWidget  {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       locale: myLocale,
-      title: 'BN LAG',
+      title: 'TheMoviewDB',
        theme: ThemeData(
         brightness: Brightness.light,
         primaryColor: primaryColor,
         fontFamily: 'Georgia',
         textTheme:  const TextTheme(
-          displayLarge: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
-          titleLarge: TextStyle(fontSize: 30.0, fontStyle: FontStyle.italic),
-          bodyMedium: TextStyle(fontSize: 18.0, fontFamily: 'Hind'),
-        ),
+            displayLarge: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+            titleLarge: TextStyle(fontSize: 30.0, fontStyle: FontStyle.italic),
+            bodyMedium: TextStyle(fontSize: 18.0, fontFamily: 'Hind'),
+          ),
         ),
       // home: SplashScreen(),
       // We use routeName so that we dont need to remember the name

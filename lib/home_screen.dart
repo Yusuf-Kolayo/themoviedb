@@ -9,6 +9,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:themoviedb/Api/movies_api.dart';
 import 'package:themoviedb/Models/movies.dart';
+import 'package:themoviedb/drawer.dart';
+import 'package:themoviedb/movie_detail_screen.dart';
 import 'package:themoviedb/size_config.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -37,10 +39,7 @@ List <bool> isSelected = [true, false];
 
  Container singleMovieCategoryContainer () {
       
-       
- 
-      
-
+        
       // ignore: sized_box_for_whitespace
       return Container(
         height: 600,
@@ -54,17 +53,18 @@ List <bool> isSelected = [true, false];
 
              // ignore: sized_box_for_whitespace
              return Container(
-                height: getProportionateScreenHeight(400),
+                height: getProportionateScreenHeight(460),
                 // decoration:BoxDecoration(border: Border.all(color: Colors.cyan.shade800), borderRadius: BorderRadius.circular(10)),
                 child: Column(
                 children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 0, top: 10, bottom: 5),
+                      padding: const EdgeInsets.only(left: 0, top: 10, bottom: 20),
                       child: Align( alignment: Alignment.centerLeft, child: Text(movieCategory, style:  GoogleFonts.kdamThmorPro( color: Colors.cyan.shade900, fontSize: 26))),
                     ),
                     // ignore: sized_box_for_whitespace
                     Container(
-                      height: getProportionateScreenHeight(340),
+                      height: getProportionateScreenHeight(360),
+                      // decoration: BoxDecoration(color: Colors.cyan.shade50),
                       // padding: EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(20), vertical: getProportionateScreenHeight(30)),
                       child: ListView.builder(
                         itemCount: moviesList.length,
@@ -73,16 +73,39 @@ List <bool> isSelected = [true, false];
                           return Container(
                             padding: const EdgeInsets.only(right: 15),
                             // height: getProportionateScreenHeight(300),
-                            child: Container(
-                                // height: 200,
-                                width: 200,
-                                decoration:  BoxDecoration(
-                                  image: DecorationImage (
-                                    image: NetworkImage(moviesList[ind].posterPath), // Replace with the URL of your network image
-                                    fit: BoxFit.contain, // Adjust the fit as needed
-                                  ),
-                                ),
+                            child: GestureDetector(
+                              onTap:() {
+                                  Navigator.pushNamed(context, MovieDetailScreen.routeName, arguments: {'movie': moviesList[ind]});
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                      height: getProportionateScreenHeight(300),
+                                      width: getProportionateScreenWidth(200),
+                                      decoration:  BoxDecoration(
+                                        image: DecorationImage (
+                                          image: NetworkImage(moviesList[ind].posterPath), // Replace with the URL of your network image
+                                          fit: BoxFit.contain, // Adjust the fit as needed
+                                        ),
+                                        // color: Colors.cyan.shade50
+                                      ),
+                                    ),
+                                    SizedBox( 
+                                      height: getProportionateScreenHeight(60),
+                                      child: Column(
+                                         children: [
+                                            const Spacer(),
+                                            Text(
+                                              moviesList[ind].originalTitle.length>18 ? '${moviesList[ind].originalTitle.substring(0, 18)} ..' : moviesList[ind].originalTitle,
+                                              style: const TextStyle(fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(moviesList[ind].releaseDate ?? '---', style: const TextStyle(fontWeight: FontWeight.bold))
+                                         ],
+                                      ),
+                                    )
+                                ],
                               ),
+                            ),
                           );
                         }
                       )
@@ -301,84 +324,7 @@ Widget build(BuildContext context) {
         ],
       ),
   ),
-	drawer: Drawer(
-		child: ListView(
-		padding: const EdgeInsets.all(0),
-		children: [
-			 
-			ListTile(
-			leading: const Icon(Icons.movie),
-			title: const Text(' Movies '),
-			onTap: () {
-				Navigator.pop(context);
-			},
-			),
-			ListTile(
-			leading: const Icon(Icons.video_collection),
-			title: const Text(' TV Shows '),
-			onTap: () {
-				Navigator.pop(context);
-			},
-			),
-			ListTile(
-			leading: const Icon(Icons.people),
-			title: const Text(' People '),
-			onTap: () {
-				Navigator.pop(context);
-			},
-			),
-			ListTile(
-			leading: const Icon(Icons.book_rounded),
-			title: const Text(' Contribution bible '),
-			onTap: () {
-				Navigator.pop(context);
-			},
-			),
-			ListTile(
-			leading: const Icon(Icons.chat_rounded),
-			title: const Text(' Discussions '),
-			onTap: () {
-				Navigator.pop(context);
-			},
-			),
-			ListTile(
-			leading: const Icon(Icons.leaderboard_rounded),
-			title: const Text('Leaderboard'),
-			onTap: () {
-				Navigator.pop(context);
-			},
-			),
-      ListTile(
-			leading: const Icon(Icons.api_sharp),
-			title: const Text('API'),
-			onTap: () {
-				Navigator.pop(context);
-			},
-			),
-      ListTile(
-			leading: const Icon(Icons.support_agent_sharp),
-			title: const Text('Support'),
-			onTap: () {
-				Navigator.pop(context);
-			},
-			),
-      ListTile(
-			leading: const Icon(Icons.content_paste_go_sharp),
-			title: const Text('About'),
-			onTap: () {
-				Navigator.pop(context);
-			},
-			),
-      ListTile(
-			leading: const Icon(Icons.login_sharp),
-			title: const Text('Login'),
-			onTap: () {
-				Navigator.pop(context);
-			},
-			),
-		],
-		),
-	), //Drawer
+	drawer: drawer(context)
 	);
 }
 }
