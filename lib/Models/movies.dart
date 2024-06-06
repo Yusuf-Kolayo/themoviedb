@@ -1,7 +1,7 @@
 class Movie {
 
   late int id;
-  late String backdropPath;
+  late String? backdropPath;
   late String genres;
   late String originalTitle;
   late String overview;

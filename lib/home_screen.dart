@@ -5,10 +5,10 @@ import 'dart:core';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:themoviedb/Api/movies_api.dart';
 import 'package:themoviedb/Models/movies.dart';
+import 'package:themoviedb/app_bar.dart';
 import 'package:themoviedb/drawer.dart';
 import 'package:themoviedb/movie_detail_screen.dart';
 import 'package:themoviedb/size_config.dart';
@@ -161,31 +161,7 @@ List <bool> isSelected = [true, false];
 @override
 Widget build(BuildContext context) {
 	return Scaffold(
-	appBar: AppBar(
-		title: Center(
-          child: Padding(
-            padding: const EdgeInsets.only(left: 30),
-            child: SvgPicture.asset(
-                  "assets/images/logo-1.svg",
-                  color:  Colors.cyan.shade100,
-                  width: 50,
-                ),
-          ),
-        ),
-    actions: <Widget>[
-        IconButton(
-            icon: const Icon(Icons.account_circle_sharp),
-            tooltip: 'Comment Icon',
-            onPressed: () {},
-          ), //IconButton
-          IconButton(
-            icon: const Icon(Icons.search),
-            tooltip: 'Setting Icon',
-            onPressed: () {},
-          )
-    ],
-		backgroundColor: Colors.cyan.shade700,
-	),
+	appBar: appBar(),
 	body: SingleChildScrollView(
       child: Column(
         children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:themoviedb/constants.dart';
 import 'package:themoviedb/routes.dart';
 import 'package:themoviedb/sign_in_screen.dart';
@@ -8,7 +9,7 @@ import 'package:themoviedb/sign_in_screen.dart';
 void main() async {
    WidgetsFlutterBinding.ensureInitialized();
    ErrorWidget.builder = (FlutterErrorDetails details) => Container();
-    runApp ( const MyApp() );
+    runApp ( const ProviderScope(child: MyApp()));
 }
 
 
